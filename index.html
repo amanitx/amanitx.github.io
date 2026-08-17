@@ -344,6 +344,13 @@
   .mobile-menu.open{opacity:1; pointer-events:auto;}
   .mobile-menu a{font-size:20px; font-weight:600; color:var(--text);}
   .mobile-menu a:hover{color:var(--accent);}
+  .mobile-menu-close{
+    position:absolute; top:20px; right:20px; width:44px; height:44px;
+    background:var(--bg-elev); border:1px solid var(--border); border-radius:50%;
+    color:var(--text); font-size:18px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .mobile-menu-close:hover{border-color:var(--accent); color:var(--accent);}
 
   /* COMMAND PALETTE */
   .cmdk-trigger{
@@ -460,6 +467,7 @@
     section{padding:48px 0;}
     .contact-box{padding:36px 22px;}
     .back-to-top{width:40px; height:40px; bottom:18px; right:18px;}
+    .proj-card{margin-right:14px;}
   }
 </style>
 </head>
@@ -491,6 +499,7 @@
 </header>
 
 <div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">✕</button>
   <a href="#about">About</a>
   <a href="#skills">Skills</a>
   <a href="#experience">Experience</a>
@@ -627,12 +636,6 @@
         <h3>📊 Monitoring &amp; Observability</h3>
         <div class="tag-row">
           <span class="tag">Prometheus</span><span class="tag">Grafana</span><span class="tag">Dashboards</span><span class="tag">Alerting</span>
-        </div>
-      </div>
-      <div class="skill-card">
-        <h3>🌐 Network Automation</h3>
-        <div class="tag-row">
-          <span class="tag">Meraki</span><span class="tag">Aruba</span><span class="tag">Zscaler</span><span class="tag">DNAC</span><span class="tag">vManage</span><span class="tag">Juniper</span><span class="tag">Comcast</span><span class="tag">NetCloud</span>
         </div>
       </div>
     </div>
@@ -805,15 +808,21 @@
   // hamburger / mobile menu
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobileMenu');
+  const mobileMenuClose = document.getElementById('mobileMenuClose');
+  function closeMobileMenu(){
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+  }
   hamburger.addEventListener('click', ()=>{
     hamburger.classList.toggle('open');
     mobileMenu.classList.toggle('open');
   });
+  mobileMenuClose.addEventListener('click', closeMobileMenu);
   mobileMenu.querySelectorAll('a').forEach(a=>{
-    a.addEventListener('click', ()=>{
-      hamburger.classList.remove('open');
-      mobileMenu.classList.remove('open');
-    });
+    a.addEventListener('click', closeMobileMenu);
+  });
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && mobileMenu.classList.contains('open')){ closeMobileMenu(); }
   });
 
   // consolidated scroll handling (progress bar + scrollspy + back-to-top),
